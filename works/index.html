@@ -1,11 +1,586 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jawabdeh — Ask. Track. Hold accountable.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1B2A4A;
+    --ink-deep: #121D33;
+    --paper: #F6F1E4;
+    --paper-dim: #EDE6D3;
+    --stamp-red: #B23A2E;
+    --register-green: #2F5233;
+    --brass: #C9A227;
+    --text-main: #21232B;
+    --text-soft: #565A6E;
+    --line: rgba(27,42,74,0.14);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--text-main);
+    font-family: 'Public Sans', sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 32px; }
+
+  a { color: inherit; text-decoration: none; }
+
+  .mono { font-family: 'IBM Plex Mono', monospace; }
+
+  /* subtle paper grain */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: radial-gradient(circle, #000 1px, transparent 1px);
+    background-size: 3px 3px;
+    z-index: 999;
+  }
+
+  /* ===== HEADER ===== */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--paper);
+    border-bottom: 1px solid var(--line);
+  }
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 32px;
+  }
+  .wordmark {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 1.35rem;
+    letter-spacing: 0.01em;
+    color: var(--ink);
+  }
+  .seal {
+    width: 30px; height: 30px;
+    border: 1.5px solid var(--ink);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.6rem;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  nav { display: flex; align-items: center; gap: 36px; }
+  nav a.navlink {
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--text-soft);
+    transition: color 0.15s ease;
+  }
+  nav a.navlink:hover { color: var(--ink); }
+  .btn-file {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.82rem;
+    font-weight: 500;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 10px 18px;
+    border: 1px solid var(--ink);
+    letter-spacing: 0.02em;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .btn-file:hover { background: var(--paper); color: var(--ink); }
+
+  @media (max-width: 760px) {
+    nav .navlink { display: none; }
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    padding: 88px 0 64px;
+    border-bottom: 1px solid var(--line);
+  }
+  .notice-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    color: var(--stamp-red);
+    border: 1px solid var(--stamp-red);
+    padding: 5px 12px;
+    margin-bottom: 28px;
+    text-transform: uppercase;
+  }
+  .notice-eyebrow::before {
+    content: "";
+    width: 6px; height: 6px;
+    background: var(--stamp-red);
+    border-radius: 50%;
+    display: inline-block;
+  }
+  h1.headline {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: clamp(2.5rem, 5.2vw, 4.1rem);
+    line-height: 1.06;
+    color: var(--ink-deep);
+    max-width: 15ch;
+    letter-spacing: -0.01em;
+  }
+  h1.headline em {
+    font-style: italic;
+    font-weight: 500;
+    color: var(--stamp-red);
+  }
+  .hero-sub {
+    margin-top: 26px;
+    font-size: 1.14rem;
+    color: var(--text-soft);
+    max-width: 46ch;
+    line-height: 1.6;
+  }
+  .hero-actions {
+    margin-top: 36px;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .btn-primary {
+    background: var(--stamp-red);
+    color: var(--paper);
+    font-weight: 600;
+    font-size: 0.96rem;
+    padding: 14px 26px;
+    border: 1px solid var(--stamp-red);
+    transition: opacity 0.15s ease;
+  }
+  .btn-primary:hover { opacity: 0.88; }
+  .btn-secondary {
+    font-weight: 600;
+    font-size: 0.96rem;
+    padding: 14px 22px;
+    border: 1px solid var(--ink);
+    color: var(--ink);
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .btn-secondary:hover { background: var(--ink); color: var(--paper); }
+
+  /* ===== LEDGER (signature element) ===== */
+  .ledger-section { padding: 72px 0; border-bottom: 1px solid var(--line); }
+  .ledger-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 30px;
+  }
+  .ledger-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--ink-deep);
+  }
+  .ledger-meta {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--text-soft);
+  }
+  .ledger {
+    border-top: 1.5px solid var(--ink);
+  }
+  .entry {
+    display: grid;
+    grid-template-columns: 108px 1fr 128px 96px;
+    gap: 20px;
+    align-items: center;
+    padding: 18px 4px;
+    border-bottom: 1px solid var(--line);
+    transition: background 0.15s ease;
+  }
+  .entry:hover { background: var(--paper-dim); }
+  .entry .case-no {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--text-soft);
+  }
+  .entry .q-text {
+    font-size: 0.98rem;
+    color: var(--text-main);
+    line-height: 1.4;
+  }
+  .entry .q-target {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text-soft);
+    margin-top: 3px;
+  }
+  .entry .clock {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--text-soft);
+    text-align: right;
+  }
+  .stamp {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 5px 10px;
+    text-align: center;
+    border: 1.5px solid currentColor;
+    transform: rotate(-2deg);
+    justify-self: end;
+    white-space: nowrap;
+  }
+  .stamp.answered { color: var(--register-green); }
+  .stamp.pending { color: var(--brass); }
+  .stamp.overdue { color: var(--stamp-red); transform: rotate(2deg); }
+
+  @media (max-width: 700px) {
+    .entry { grid-template-columns: 1fr; gap: 8px; }
+    .entry .clock { text-align: left; }
+    .stamp { justify-self: start; }
+  }
+
+  /* ===== STATS ===== */
+  .stats-section { padding: 60px 0; border-bottom: 1px solid var(--line); background: var(--paper-dim); }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+  }
+  .stat-num {
+    font-family: 'Fraunces', serif;
+    font-size: 2.6rem;
+    font-weight: 600;
+    color: var(--ink-deep);
+  }
+  .stat-label {
+    margin-top: 6px;
+    font-size: 0.86rem;
+    color: var(--text-soft);
+    font-weight: 500;
+  }
+  @media (max-width: 760px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* ===== PROCESS ===== */
+  .process-section { padding: 88px 0; border-bottom: 1px solid var(--line); }
+  .section-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+    margin-bottom: 14px;
+  }
+  .section-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
+    color: var(--ink-deep);
+    max-width: 22ch;
+    margin-bottom: 52px;
+  }
+  .process-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+  }
+  .process-step { border-top: 2px solid var(--ink); padding-top: 20px; }
+  .step-no {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.82rem;
+    color: var(--stamp-red);
+    font-weight: 600;
+  }
+  .step-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.28rem;
+    font-weight: 600;
+    margin: 12px 0 10px;
+    color: var(--ink-deep);
+  }
+  .step-desc { font-size: 0.95rem; color: var(--text-soft); line-height: 1.55; }
+  @media (max-width: 760px) {
+    .process-grid { grid-template-columns: 1fr; gap: 32px; }
+  }
+
+  /* ===== ENDORSEMENTS ===== */
+  .endorse-section { padding: 88px 0; border-bottom: 1px solid var(--line); background: var(--ink-deep); }
+  .endorse-section .section-eyebrow { color: rgba(246,241,228,0.55); }
+  .endorse-section .section-title { color: var(--paper); }
+  .endorse-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: rgba(246,241,228,0.14);
+    border: 1px solid rgba(246,241,228,0.14);
+  }
+  .endorse-card {
+    background: var(--ink-deep);
+    padding: 32px;
+  }
+  .endorse-quote {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 1.12rem;
+    color: var(--paper);
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+  .endorse-who {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--brass);
+    letter-spacing: 0.03em;
+  }
+  @media (max-width: 760px) {
+    .endorse-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ===== CTA / FOOTER ===== */
+  .cta-section {
+    padding: 96px 0 72px;
+    text-align: center;
+  }
+  .cta-seal {
+    width: 74px; height: 74px;
+    border: 2px solid var(--ink);
+    border-radius: 50%;
+    margin: 0 auto 28px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.05em;
+    text-align: center;
+    color: var(--ink);
+  }
+  .cta-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: clamp(1.8rem, 3.4vw, 2.6rem);
+    color: var(--ink-deep);
+    max-width: 20ch;
+    margin: 0 auto 32px;
+  }
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 32px;
+  }
+  .footer-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .footer-links { display: flex; gap: 28px; }
+  .footer-links a { font-size: 0.85rem; color: var(--text-soft); }
+  .footer-links a:hover { color: var(--ink); }
+  .footer-note { font-family: 'IBM Plex Mono', monospace; font-size: 0.78rem; color: var(--text-soft); }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--stamp-red);
+    outline-offset: 2px;
+  }
+</style>
 </head>
 <body>
-<p>hey</p>
+
+<header>
+  <div class="header-inner">
+    <div class="wordmark">
+      <span class="seal">JD</span>
+      Jawabdeh
+    </div>
+    <nav>
+      <a class="navlink" href="#ledger">The Ledger</a>
+      <a class="navlink" href="#process">How It Works</a>
+      <a class="navlink" href="#institutions">For Institutions</a>
+      <a class="btn-file" href="#file">File a Question →</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="notice-eyebrow">Public Notice · Open Registry</div>
+    <h1 class="headline">Every question gets a case number. Every answer goes <em>on record.</em></h1>
+    <p class="hero-sub">Jawabdeh lets students put questions to teachers and student union office-bearers in the open — and keeps a running, public register of who answered, who didn't, and how long it took.</p>
+    <div class="hero-actions">
+      <a class="btn-primary" href="#file">File a Question</a>
+      <a class="btn-secondary" href="#ledger">View the Ledger</a>
+    </div>
+  </div>
+</section>
+
+<section class="ledger-section" id="ledger">
+  <div class="wrap">
+    <div class="ledger-head">
+      <div class="ledger-title">The Open Ledger</div>
+      <div class="ledger-meta">SHOWING 5 OF 1,842 ACTIVE CASES</div>
+    </div>
+    <div class="ledger">
+      <div class="entry">
+        <div class="case-no">JD/2026/0142</div>
+        <div>
+          <div class="q-text">Why was the internal assessment schedule changed with two days' notice?</div>
+          <span class="q-target">To: Dept. Coordinator, CSE</span>
+        </div>
+        <div class="clock">Day 2 of 7</div>
+        <div class="stamp pending">Pending</div>
+      </div>
+      <div class="entry">
+        <div class="case-no">JD/2026/0139</div>
+        <div>
+          <div class="q-text">Where did the ₹40 cultural fest fee collected from final years go?</div>
+          <span class="q-target">To: Student Union, Treasurer</span>
+        </div>
+        <div class="clock">Closed in 4 days</div>
+        <div class="stamp answered">Answered</div>
+      </div>
+      <div class="entry">
+        <div class="case-no">JD/2026/0135</div>
+        <div>
+          <div class="q-text">Can attendance shortage appeals get a written reason for rejection?</div>
+          <span class="q-target">To: Examination Cell</span>
+        </div>
+        <div class="clock">11 days overdue</div>
+        <div class="stamp overdue">Overdue</div>
+      </div>
+      <div class="entry">
+        <div class="case-no">JD/2026/0128</div>
+        <div>
+          <div class="q-text">Will the hostel WiFi upgrade promised in the union manifesto happen this term?</div>
+          <span class="q-target">To: Student Union, President</span>
+        </div>
+        <div class="clock">Closed in 1 day</div>
+        <div class="stamp answered">Answered</div>
+      </div>
+      <div class="entry">
+        <div class="case-no">JD/2026/0121</div>
+        <div>
+          <div class="q-text">Why weren't lab marks published before the semester exam form deadline?</div>
+          <span class="q-target">To: Dept. Coordinator, ECE</span>
+        </div>
+        <div class="clock">Day 5 of 7</div>
+        <div class="stamp pending">Pending</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="stats-section">
+  <div class="wrap">
+    <div class="stats-grid">
+      <div>
+        <div class="stat-num">1,842</div>
+        <div class="stat-label">Questions filed to date</div>
+      </div>
+      <div>
+        <div class="stat-num">78%</div>
+        <div class="stat-label">Answered within 7 days</div>
+      </div>
+      <div>
+        <div class="stat-num">3.1 <span class="mono" style="font-size:1.1rem;">days</span></div>
+        <div class="stat-label">Median response time</div>
+      </div>
+      <div>
+        <div class="stat-num">26</div>
+        <div class="stat-label">Institutions on the register</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="process-section" id="process">
+  <div class="wrap">
+    <div class="section-eyebrow">The Process</div>
+    <h2 class="section-title">A question doesn't disappear once it's asked.</h2>
+    <div class="process-grid">
+      <div class="process-step">
+        <div class="step-no">01 — File</div>
+        <div class="step-title">Put it on the record</div>
+        <p class="step-desc">Write your question, name who it's addressed to, and submit it under your real college ID or, if you choose, anonymously. It's assigned a case number the moment it's filed.</p>
+      </div>
+      <div class="process-step">
+        <div class="step-no">02 — Respond</div>
+        <div class="step-title">The clock starts</div>
+        <p class="step-desc">The teacher or union member gets 7 days to respond publicly. Their answer is attached to the same case number, visible to anyone who looks it up.</p>
+      </div>
+      <div class="process-step">
+        <div class="step-no">03 — Close or carry over</div>
+        <div class="step-title">Nothing gets buried</div>
+        <p class="step-desc">Answered cases are marked closed. Unanswered ones stay open and overdue, in plain view, until they're resolved — no case is quietly archived.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="endorse-section" id="institutions">
+  <div class="wrap">
+    <div class="section-eyebrow">On the Register</div>
+    <h2 class="section-title">Trusted by student bodies who'd rather answer than be asked why they didn't.</h2>
+    <div class="endorse-grid">
+      <div class="endorse-card">
+        <p class="endorse-quote">"We used to get the same three complaints over WhatsApp every week. Now they're one thread each, with a deadline. It's actually made our job easier."</p>
+        <div class="endorse-who">— GENERAL SECRETARY, STUDENT UNION</div>
+      </div>
+      <div class="endorse-card">
+        <p class="endorse-quote">"Students stopped guessing what happened to their grievances. They can see the case sitting there, open, with my name on it."</p>
+        <div class="endorse-who">— DEPARTMENT COORDINATOR</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section" id="file">
+  <div class="wrap">
+    <div class="cta-seal">FILE<br>A<br>CASE</div>
+    <h2 class="cta-title">Have a question no one's answered yet?</h2>
+    <a class="btn-primary" href="#">Open a New Case →</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-note">JAWABDEH — PUBLIC REGISTRY, EST. 2026</div>
+    <div class="footer-links">
+      <a href="#">About</a>
+      <a href="#">For Institutions</a>
+      <a href="#">Privacy</a>
+      <a href="#">Contact</a>
+    </div>
+  </div>
+</footer>
+
 </body>
 </html>
